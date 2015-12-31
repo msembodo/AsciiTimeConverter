@@ -11,6 +11,7 @@ public interface Format {
 
     @Option
     String getFormat();
+    boolean isFormat();
 
     @Option(helpRequest = true)
     boolean getHelp();

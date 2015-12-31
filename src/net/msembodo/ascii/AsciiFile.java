@@ -1,11 +1,12 @@
 package net.msembodo.ascii;
 
 import com.opencsv.CSVReader;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,19 +38,8 @@ public class AsciiFile {
         ascii.remove(0);
     }
 
-    public void printContent() {
-        for (String[] row : ascii) {
-            for (int i = 0; i < row.length; i++)
-                if (row[i] == null)
-                    System.out.print("" + '\t');
-                else
-                    System.out.print(row[i] + '\t');
-            System.out.println();
-        }
-    }
-
     public void convertDateTime(String dateTimeFormat) {
-        SimpleDateFormat df = new SimpleDateFormat(dateTimeFormat);
+        DateTimeFormatter dtf = DateTimeFormat.forPattern(dateTimeFormat);
 
         String[] time = new String[ascii.size()];
         long[] epoch = new long[ascii.size()];
@@ -61,14 +51,11 @@ public class AsciiFile {
             i++;
         }
 
-        try {
-            for (int t = 0; t < time.length; t++) {
-                Date date = df.parse(time[t]);
-                epoch[t] = (long) Math.floor(date.getTime() / 1000);
-            }
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
+        double origin = (new DateTime(1970, 1, 1, 0, 0, 0).getMillis()) / 1000;
+
+        for (int t = 0; t < time.length; t++) {
+            DateTime date = dtf.parseDateTime(time[t]);
+            epoch[t] = (date.getMillis() / 1000) - (long) origin;
         }
 
         String newNameHeader = "DateTime";
