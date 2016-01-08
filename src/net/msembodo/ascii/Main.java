@@ -5,7 +5,7 @@ import uk.co.flamingpenguin.jewel.cli.ArgumentValidationException;
 import static uk.co.flamingpenguin.jewel.cli.CliFactory.parseArguments;
 
 /**
- * Main class.
+ * Main class for command line.
  */
 public class Main {
     public static void main(String[] args) {
